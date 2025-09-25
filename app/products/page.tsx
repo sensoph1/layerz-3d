@@ -163,7 +163,7 @@ export default function ProductsCatalog() {
             </div>
             <h3 className="text-lg font-semibold text-gray-900 mb-2">No products found</h3>
             <p className="text-gray-600 mb-4">
-              Try adjusting your search or filters to find what you're looking for.
+              Try adjusting your search or filters to find what you&apos;re looking for.
             </p>
             <button
               onClick={() => {
@@ -183,8 +183,7 @@ export default function ProductsCatalog() {
 }
 
 // Product Card Component (Grid View)
-function ProductCard({ product }) {
-  // Use the first image from the images array, fallback to a placeholder
+function ProductCard({ product }: { product: any }) {
   const productImage = product.images?.[0] || '/images/products/placeholder.jpg';
   
   return (
@@ -209,7 +208,9 @@ function ProductCard({ product }) {
         </div>
         
         <div className="p-4">
-          <h3 className="text-lg font-semibold text-gray-900 mb-1 group-hover:text-blue-600 transition-colors">{product.name}</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-1 group-hover:text-blue-600 transition-colors">
+            {product.name}
+          </h3>
           <p className="text-sm text-gray-600 mb-2 line-clamp-2">{product.description}</p>
           
           <div className="flex items-center gap-2 mb-3">
@@ -231,7 +232,6 @@ function ProductCard({ product }) {
         </div>
       </Link>
       
-      {/* Separate buttons outside the link to prevent nested interactions */}
       <div className="px-4 pb-4 flex gap-2">
         <button className="absolute top-2 right-2 p-2 bg-white rounded-full shadow-md hover:bg-gray-50 opacity-0 group-hover:opacity-100 transition-opacity z-10">
           <Heart size={16} className="text-gray-600" />
@@ -246,7 +246,6 @@ function ProductCard({ product }) {
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
-            // Add to cart logic here
             console.log('Add to cart:', product.name);
           }}
         >
@@ -258,20 +257,17 @@ function ProductCard({ product }) {
 }
 
 // Product List Item Component (List View)
-function ProductListItem({ product }) {
-  return (
-    <div className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
-      <div className="flex flex-col md:flex-row gap-6">
-// Product List Item Component (List View)
-function ProductListItem({ product }) {
+function ProductListItem({ product }: { product: any }) {
+  const productImage = product.images?.[0] || '/images/products/placeholder.jpg';
+  
   return (
     <div className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
       <div className="flex flex-col md:flex-row gap-6">
         <div className="md:w-48 flex-shrink-0">
-          <a href={`/products/${product.id}`}>
+          <Link href={`/products/${product.slug}`}>
             <div className="relative">
               <img
-                src={product.image}
+                src={productImage}
                 alt={product.name}
                 className="w-full h-32 md:h-48 object-cover rounded-lg hover:scale-105 transition-transform duration-300"
               />
@@ -286,15 +282,15 @@ function ProductListItem({ product }) {
                 </div>
               )}
             </div>
-          </a>
+          </Link>
         </div>
         
         <div className="flex-1 flex flex-col justify-between">
           <div>
             <div className="flex items-start justify-between mb-2">
-              <a href={`/products/${product.id}`} className="hover:text-blue-600 transition-colors">
+              <Link href={`/products/${product.slug}`} className="hover:text-blue-600 transition-colors">
                 <h3 className="text-xl font-semibold text-gray-900">{product.name}</h3>
-              </a>
+              </Link>
               <button className="p-1 text-gray-400 hover:text-red-500 transition-colors">
                 <Heart size={20} />
               </button>
@@ -325,12 +321,12 @@ function ProductListItem({ product }) {
           <div className="flex items-center justify-between">
             <span className="text-2xl font-bold text-blue-600">${product.price}</span>
             <div className="flex gap-2">
-              <a
-                href={`/products/${product.id}`}
+              <Link
+                href={`/products/${product.slug}`}
                 className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
               >
                 View Details
-              </a>
+              </Link>
               <button
                 disabled={!product.inStock}
                 className={`px-4 py-2 rounded-lg font-medium transition-colors ${
@@ -341,7 +337,6 @@ function ProductListItem({ product }) {
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
-                  // Add to cart logic here
                   console.log('Add to cart:', product.name);
                 }}
               >
