@@ -1,117 +1,13 @@
+// app/products/page.tsx (Products Catalog)
 "use client";
 
 import { useState } from 'react';
-import { Search, Filter, Grid, List, Star, Heart, ShoppingCart } from 'lucide-react';
+import Link from 'next/link';
+import { Search, Grid, List, Star, Heart, ShoppingCart } from 'lucide-react';
+import { products as allProducts, getCategories } from '../../lib/products';
 
-// Sample product data - you'd normally get this from a database/CMS
-const allProducts = [
-  {
-    id: 'cute-dragon',
-    name: 'Cute Dragon',
-    price: 15,
-    image: '/images/products/dragon.jpg',
-    description: 'Adorable baby dragon perfect for desks and shelves',
-    category: 'Animals',
-    rating: 4.8,
-    reviewCount: 24,
-    inStock: true,
-    featured: true,
-    tags: ['dragon', 'fantasy', 'cute']
-  },
-  {
-    id: 'sleepy-cat',
-    name: 'Sleepy Cat',
-    price: 12,
-    image: '/images/products/cat.jpg',
-    description: 'Perfect desk companion that brings calm to your workspace',
-    category: 'Animals',
-    rating: 4.9,
-    reviewCount: 31,
-    inStock: true,
-    featured: true,
-    tags: ['cat', 'cute', 'desk-toy']
-  },
-  {
-    id: 'tiny-elephant',
-    name: 'Tiny Elephant',
-    price: 18,
-    image: '/images/products/elephant.jpg',
-    description: 'Lucky elephant for your home or office',
-    category: 'Animals',
-    rating: 4.7,
-    reviewCount: 18,
-    inStock: true,
-    featured: false,
-    tags: ['elephant', 'luck', 'cute']
-  },
-  {
-    id: 'phone-stand',
-    name: 'Phone Stand',
-    price: 8,
-    image: '/images/products/phone-stand.jpg',
-    description: 'Adjustable phone stand for desk or nightstand',
-    category: 'Functional',
-    rating: 4.6,
-    reviewCount: 42,
-    inStock: true,
-    featured: false,
-    tags: ['phone', 'stand', 'functional']
-  },
-  {
-    id: 'desk-organizer',
-    name: 'Desk Organizer',
-    price: 25,
-    image: '/images/products/organizer.jpg',
-    description: 'Multi-compartment organizer for pens, clips, and supplies',
-    category: 'Functional',
-    rating: 4.8,
-    reviewCount: 29,
-    inStock: true,
-    featured: false,
-    tags: ['organizer', 'desk', 'functional']
-  },
-  {
-    id: 'mini-planter',
-    name: 'Mini Planter',
-    price: 14,
-    image: '/images/products/planter.jpg',
-    description: 'Cute geometric planter for succulents and small plants',
-    category: 'Home & Garden',
-    rating: 4.5,
-    reviewCount: 16,
-    inStock: false,
-    featured: false,
-    tags: ['planter', 'geometric', 'plants']
-  },
-  {
-    id: 'custom-keychain',
-    name: 'Custom Keychain',
-    price: 6,
-    image: '/images/products/keychain.jpg',
-    description: 'Personalized keychain with your name or initials',
-    category: 'Gifts',
-    rating: 4.9,
-    reviewCount: 67,
-    inStock: true,
-    featured: true,
-    tags: ['keychain', 'custom', 'gift']
-  },
-  {
-    id: 'dice-set',
-    name: 'Gaming Dice Set',
-    price: 22,
-    image: '/images/products/dice.jpg',
-    description: 'Complete D&D dice set in premium finish',
-    category: 'Gaming',
-    rating: 4.7,
-    reviewCount: 35,
-    inStock: true,
-    featured: false,
-    tags: ['dice', 'gaming', 'dnd']
-  }
-];
-
-const categories = ['All', 'Animals', 'Functional', 'Home & Garden', 'Gifts', 'Gaming'];
+// Get categories dynamically from the products data
+const categories = getCategories();
 const sortOptions = [
   { label: 'Featured', value: 'featured' },
   { label: 'Price: Low to High', value: 'price-asc' },
@@ -125,7 +21,6 @@ export default function ProductsCatalog() {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [sortBy, setSortBy] = useState('featured');
   const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'list'
-  const [showFilters, setShowFilters] = useState(false);
 
   // Filter and sort products
   const filteredProducts = allProducts
@@ -162,10 +57,10 @@ export default function ProductsCatalog() {
               Layer<span className="text-blue-600">Z</span> 3D
             </div>
             <nav className="hidden md:flex space-x-8">
-              <a href="/" className="text-gray-700 hover:text-blue-600">Home</a>
-              <a href="/products" className="text-blue-600 font-medium">Products</a>
-              <a href="/custom" className="text-gray-700 hover:text-blue-600">Custom Orders</a>
-              <a href="/contact" className="text-gray-700 hover:text-blue-600">Contact</a>
+              <Link href="/" className="text-gray-700 hover:text-blue-600">Home</Link>
+              <Link href="/products" className="text-blue-600 font-medium">Products</Link>
+              <Link href="/custom" className="text-gray-700 hover:text-blue-600">Custom Orders</Link>
+              <Link href="/contact" className="text-gray-700 hover:text-blue-600">Contact</Link>
             </nav>
           </div>
         </div>
@@ -289,12 +184,15 @@ export default function ProductsCatalog() {
 
 // Product Card Component (Grid View)
 function ProductCard({ product }) {
+  // Use the first image from the images array, fallback to a placeholder
+  const productImage = product.images?.[0] || '/images/products/placeholder.jpg';
+  
   return (
     <div className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-lg transition-shadow group">
-      <a href={`/products/${product.id}`} className="block">
+      <Link href={`/products/${product.slug}`} className="block">
         <div className="relative">
           <img
-            src={product.image}
+            src={productImage}
             alt={product.name}
             className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
           />
@@ -331,7 +229,7 @@ function ProductCard({ product }) {
             <span className="text-xl font-bold text-blue-600">${product.price}</span>
           </div>
         </div>
-      </a>
+      </Link>
       
       {/* Separate buttons outside the link to prevent nested interactions */}
       <div className="px-4 pb-4 flex gap-2">
@@ -360,11 +258,10 @@ function ProductCard({ product }) {
 }
 
 // Product List Item Component (List View)
-// function ProductListItem({ product }) {
-//   return (
-//     <div className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
-//       <div className="flex flex-col md:flex-row gap-6">
-      
+function ProductListItem({ product }) {
+  return (
+    <div className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
+      <div className="flex flex-col md:flex-row gap-6">
 // Product List Item Component (List View)
 function ProductListItem({ product }) {
   return (

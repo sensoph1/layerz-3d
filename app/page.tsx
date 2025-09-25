@@ -1,7 +1,9 @@
+// app/page.tsx (Homepage)
 "use client";
 
 import { useState } from 'react';
-import { Camera, Mail, Phone, MapPin, Star, ArrowRight, Upload, Palette, Clock } from 'lucide-react';
+import Link from 'next/link';
+import { Camera, Mail, Phone, MapPin, Star, ArrowRight, Palette, Clock } from 'lucide-react';
 
 export default function HomePage() {
   const [formData, setFormData] = useState({
@@ -60,9 +62,9 @@ export default function HomePage() {
               </div>
             </div>
             <nav className="hidden md:flex space-x-8">
-              <a href="/" className="text-gray-900 hover:text-blue-600 font-medium">Home</a>
-              <a href="/products" className="text-gray-700 hover:text-blue-600">Products</a>
-              <a href="/custom" className="text-gray-700 hover:text-blue-600">Custom Orders</a>
+              <Link href="/" className="text-gray-900 hover:text-blue-600 font-medium">Home</Link>
+              <Link href="/products" className="text-gray-700 hover:text-blue-600">Products</Link>
+              <Link href="/custom" className="text-gray-700 hover:text-blue-600">Custom Orders</Link>
               <a href="#contact" className="text-gray-700 hover:text-blue-600">Contact</a>
             </nav>
             <button className="md:hidden p-2">
@@ -90,19 +92,19 @@ export default function HomePage() {
                 and personalized designs. From concept to creation, we handle every step.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <a 
+                <Link 
                   href="/custom"
                   className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition-colors"
                 >
                   <ArrowRight size={20} />
                   Start Custom Order
-                </a>
-                <a 
+                </Link>
+                <Link 
                   href="/products"
                   className="border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-8 py-3 rounded-lg font-semibold transition-colors text-center"
                 >
                   Browse Products
-                </a>
+                </Link>
               </div>
             </div>
             <div className="relative">
@@ -176,7 +178,7 @@ export default function HomePage() {
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {featuredProducts.map((product, index) => (
-              <a 
+              <Link
                 key={index} 
                 href={`/products/${product.id || product.name.toLowerCase().replace(/\s+/g, '-')}`}
                 className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow group block"
@@ -201,17 +203,17 @@ export default function HomePage() {
                     </span>
                   </div>
                 </div>
-              </a>
+              </Link>
             ))}
           </div>
           <div className="text-center mt-12">
-            <a 
+            <Link 
               href="/products"
               className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold inline-flex items-center gap-2 transition-colors"
             >
               View All Products
               <ArrowRight size={20} />
-            </a>
+            </Link>
           </div>
         </div>
       </section>

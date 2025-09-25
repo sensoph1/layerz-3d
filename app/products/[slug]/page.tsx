@@ -1,7 +1,9 @@
 // app/products/[slug]/page.tsx
+// app/products/[slug]/page.tsx (Individual Product Pages)
 "use client";
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { ArrowLeft, ShoppingCart, Heart, Share2, Star, Truck, Shield, RotateCcw } from 'lucide-react';
 import { getProductBySlug } from '../../../lib/products';
 
@@ -166,9 +168,9 @@ export default function ProductPage({ params }: ProductPageProps) {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900 mb-4">Product Not Found</h1>
-          <a href="/products" className="text-blue-600 hover:text-blue-700">
+          <Link href="/products" className="text-blue-600 hover:text-blue-700">
             ← Back to Products
-          </a>
+          </Link>
         </div>
       </div>
     );
@@ -181,10 +183,10 @@ export default function ProductPage({ params }: ProductPageProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center space-x-4">
-              <a href="/products" className="flex items-center gap-2 text-gray-600 hover:text-gray-900">
+              <Link href="/products" className="flex items-center gap-2 text-gray-600 hover:text-gray-900">
                 <ArrowLeft size={20} />
                 <span>Back to Products</span>
-              </a>
+              </Link>
             </div>
             <div className="text-2xl font-bold text-gray-900">
               Layer<span className="text-blue-600">Z</span> 3D
