@@ -2,13 +2,47 @@
 // app/products/[slug]/page.tsx (Individual Product Pages)
 "use client";
 
-import { useState } from 'react';
+import { useState, use } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, ShoppingCart, Heart, Share2, Star, Truck, Shield, RotateCcw } from 'lucide-react';
 import { getProductBySlug } from '../../../lib/products';
 
+// TypeScript interfaces
+interface ProductSize {
+  name: string;
+  price: number;
+  description: string;
+}
+
+interface ProductColor {
+  name: string;
+  hex: string;
+}
+
+interface Product {
+  id: string;
+  slug: string;
+  name: string;
+  price: number;
+  images: string[];
+  description: string;
+  longDescription: string;
+  features: string[];
+  specifications: Record<string, string>;
+  sizes?: ProductSize[];
+  colors: ProductColor[];
+  category: string;
+  tags: string[];
+  inStock: boolean;
+  featured: boolean;
+  rating: number;
+  reviewCount: number;
+  processingTime: string;
+  weight: number;
+}
+
 // Simple interactive component embedded in the page
-function ProductInteractiveElements({ product }) {
+function ProductInteractiveElements({ product }: { product: Product }) {
   const [selectedImage, setSelectedImage] = useState(0);
   const [selectedSize, setSelectedSize] = useState(0);
   const [selectedColor, setSelectedColor] = useState(0);
@@ -33,7 +67,7 @@ function ProductInteractiveElements({ product }) {
         {/* Thumbnail Images */}
         {product.images.length > 1 && (
           <div className="grid grid-cols-4 gap-4">
-            {product.images.map((image, index) => (
+            {product.images.map((image: string, index: number) => (
               <button
                 key={index}
                 onClick={() => setSelectedImage(index)}
@@ -59,7 +93,7 @@ function ProductInteractiveElements({ product }) {
         <div>
           <h3 className="text-lg font-semibold text-gray-900 mb-3">Size</h3>
           <div className="grid grid-cols-3 gap-3">
-            {product.sizes.map((size, index) => (
+                            {product.sizes.map((size: ProductSize, index: number) => (
               <button
                 key={index}
                 onClick={() => setSelectedSize(index)}
@@ -83,7 +117,7 @@ function ProductInteractiveElements({ product }) {
         <div>
           <h3 className="text-lg font-semibold text-gray-900 mb-3">Color</h3>
           <div className="flex flex-wrap gap-3">
-            {product.colors.map((color, index) => (
+                          {product.colors.map((color: ProductColor, index: number) => (
               <button
                 key={index}
                 onClick={() => setSelectedColor(index)}
@@ -155,13 +189,15 @@ function ProductInteractiveElements({ product }) {
 }
 
 interface ProductPageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 export default function ProductPage({ params }: ProductPageProps) {
-  const product = getProductBySlug(params.slug);
+  // Unwrap the async params
+  const { slug } = use(params);
+  const product = getProductBySlug(slug);
   
   if (!product) {
     return (
