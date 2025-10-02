@@ -1,4 +1,4 @@
-// next.config.js
+// next.config.js (ESLint Configuration) - v1.1
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   eslint: {

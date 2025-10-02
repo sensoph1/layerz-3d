@@ -1,10 +1,26 @@
-// app/products/page.tsx (Products Catalog)
+// app/products/page.tsx (Products Catalog) - v1.4
 "use client";
 
 import { useState } from 'react';
 import Link from 'next/link';
 import { Search, Grid, List, Star, Heart, ShoppingCart } from 'lucide-react';
 import { products as allProducts, getCategories } from '../../lib/products';
+
+// TypeScript interface for Product
+interface Product {
+  id: string;
+  slug: string;
+  name: string;
+  price: number;
+  images: string[];
+  description: string;
+  category: string;
+  rating: number;
+  reviewCount: number;
+  inStock: boolean;
+  featured: boolean;
+  tags: string[];
+}
 
 // Get categories dynamically from the products data
 const categories = getCategories();
@@ -183,7 +199,7 @@ export default function ProductsCatalog() {
 }
 
 // Product Card Component (Grid View)
-function ProductCard({ product }: { product: any }) {
+function ProductCard({ product }: { product: Product }) {
   const productImage = product.images?.[0] || '/images/products/placeholder.jpg';
   
   return (
@@ -257,7 +273,7 @@ function ProductCard({ product }: { product: any }) {
 }
 
 // Product List Item Component (List View)
-function ProductListItem({ product }: { product: any }) {
+function ProductListItem({ product }: { product: Product }) {
   const productImage = product.images?.[0] || '/images/products/placeholder.jpg';
   
   return (
