@@ -1,4 +1,4 @@
-// app/products/[slug]/page.tsx (Individual Product Pages) - v2.1
+// app/products/[slug]/page.tsx (Individual Product Pages) - v2.3
 "use client";
 
 import { useState, use } from 'react';
@@ -110,21 +110,23 @@ export default function ProductPage({ params }: ProductPageProps) {
             {/* Title and Price */}
             <div>
               <h1 className="text-3xl font-bold text-gray-900 mb-2">{product.name}</h1>
-              <div className="flex items-center gap-4 mb-4">
-                <div className="flex items-center">
-                  {[...Array(5)].map((_, i) => (
-                    <Star 
-                      key={i} 
-                      size={16} 
-                      className={i < Math.floor(product.rating) ? 'text-yellow-400 fill-current' : 'text-gray-300'} 
-                    />
-                  ))}
-                  <span className="text-sm text-gray-600 ml-2">
-                    {product.rating} ({product.reviewCount} reviews)
-                  </span>
+              {product.reviewCount > 0 && (
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="flex items-center">
+                    {[...Array(5)].map((_, i) => (
+                      <Star 
+                        key={i} 
+                        size={16} 
+                        className={i < Math.floor(product.rating) ? 'text-yellow-400 fill-current' : 'text-gray-300'} 
+                      />
+                    ))}
+                    <span className="text-sm text-gray-600 ml-2">
+                      {product.rating} ({product.reviewCount} reviews)
+                    </span>
+                  </div>
                 </div>
-              </div>
-              <div className="text-3xl font-bold text-blue-600">${currentPrice}</div>
+              )}
+              <div className="text-3xl font-bold text-blue-600 mt-4">${currentPrice}</div>
             </div>
 
             {/* Size Selection */}
@@ -242,7 +244,7 @@ export default function ProductPage({ params }: ProductPageProps) {
               </div>
             </div>
 
-            {/* Tabs - Description and Reviews */}
+            {/* Tabs - Description, Features, and Reviews */}
             <div className="border-t pt-6">
               <div className="border-b mb-6">
                 <nav className="flex space-x-8">
@@ -257,6 +259,16 @@ export default function ProductPage({ params }: ProductPageProps) {
                     Description
                   </button>
                   <button 
+                    onClick={() => setActiveTab('features')}
+                    className={`py-3 px-1 font-semibold border-b-2 transition-colors ${
+                      activeTab === 'features' 
+                        ? 'border-blue-600 text-blue-600' 
+                        : 'border-transparent text-gray-600 hover:text-gray-900'
+                    }`}
+                  >
+                    Features
+                  </button>
+                  <button 
                     onClick={() => setActiveTab('reviews')}
                     className={`py-3 px-1 font-semibold border-b-2 transition-colors ${
                       activeTab === 'reviews' 
@@ -264,7 +276,7 @@ export default function ProductPage({ params }: ProductPageProps) {
                         : 'border-transparent text-gray-600 hover:text-gray-900'
                     }`}
                   >
-                    Reviews ({product.reviewCount})
+                    Reviews {product.reviewCount > 0 ? `(${product.reviewCount})` : ''}
                   </button>
                 </nav>
               </div>
@@ -272,28 +284,31 @@ export default function ProductPage({ params }: ProductPageProps) {
               {/* Tab Content */}
               {activeTab === 'description' && (
                 <div>
-                  <p className="text-gray-600 leading-relaxed whitespace-pre-line mb-6">{product.longDescription}</p>
-                  
-                  {product.features && product.features.length > 0 && (
-                    <div>
-                      <h4 className="font-semibold text-gray-900 mb-3">Key Features:</h4>
-                      <ul className="space-y-2">
-                        {product.features.map((feature, index) => (
-                          <li key={index} className="flex items-start gap-2">
-                            <div className="w-2 h-2 bg-blue-600 rounded-full mt-2 flex-shrink-0"></div>
-                            <span className="text-gray-600">{feature}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
+                  <p className="text-gray-600 leading-relaxed whitespace-pre-line">{product.longDescription}</p>
+                </div>
+              )}
+
+              {activeTab === 'features' && (
+                <div>
+                  {product.features && product.features.length > 0 ? (
+                    <ul className="space-y-3">
+                      {product.features.map((feature, index) => (
+                        <li key={index} className="flex items-start gap-3">
+                          <div className="w-2 h-2 bg-blue-600 rounded-full mt-2 flex-shrink-0"></div>
+                          <span className="text-gray-600">{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="text-gray-600">No features listed for this product.</p>
                   )}
                 </div>
               )}
 
               {activeTab === 'reviews' && (
                 <div className="text-center py-8 text-gray-600">
-                  <p>Reviews coming soon!</p>
-                  <p className="text-sm mt-2">Be the first to review this product.</p>
+                  <p className="text-lg mb-2">No reviews yet</p>
+                  <p className="text-sm">Be the first to review this product!</p>
                 </div>
               )}
             </div>

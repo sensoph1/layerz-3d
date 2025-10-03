@@ -1,4 +1,4 @@
-// app/products/page.tsx (Products Catalog) - v1.4
+// app/products/page.tsx (Products Catalog) - v1.6
 "use client";
 
 import { useState } from 'react';
@@ -158,7 +158,7 @@ export default function ProductsCatalog() {
 
         {/* Products Grid/List */}
         {viewMode === 'grid' ? (
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
@@ -203,72 +203,36 @@ function ProductCard({ product }: { product: Product }) {
   const productImage = product.images?.[0] || '/images/products/placeholder.jpg';
   
   return (
-    <div className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-lg transition-shadow group">
-      <Link href={`/products/${product.slug}`} className="block">
-        <div className="relative">
+    <Link href={`/products/${product.slug}`} className="group block">
+      <div className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-xl transition-shadow">
+        <div className="relative aspect-square overflow-hidden">
           <img
             src={productImage}
             alt={product.name}
-            className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           />
           {!product.inStock && (
             <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-              <span className="text-white font-semibold">Out of Stock</span>
+              <span className="text-white font-semibold text-lg">Out of Stock</span>
             </div>
           )}
           {product.featured && (
-            <div className="absolute top-2 left-2 bg-blue-600 text-white px-2 py-1 rounded text-xs font-semibold">
+            <div className="absolute top-3 left-3 bg-blue-600 text-white px-3 py-1 rounded-md text-sm font-semibold">
               Featured
             </div>
           )}
         </div>
         
         <div className="p-4">
-          <h3 className="text-lg font-semibold text-gray-900 mb-1 group-hover:text-blue-600 transition-colors">
+          <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
             {product.name}
           </h3>
-          <p className="text-sm text-gray-600 mb-2 line-clamp-2">{product.description}</p>
-          
-          <div className="flex items-center gap-2 mb-3">
-            <div className="flex items-center">
-              {[...Array(5)].map((_, i) => (
-                <Star
-                  key={i}
-                  size={14}
-                  className={i < Math.floor(product.rating) ? 'text-yellow-400 fill-current' : 'text-gray-300'}
-                />
-              ))}
-            </div>
-            <span className="text-xs text-gray-500">({product.reviewCount})</span>
-          </div>
-          
-          <div className="flex items-center justify-between">
-            <span className="text-xl font-bold text-blue-600">${product.price}</span>
+          <div className="text-xl font-bold text-blue-600">
+            ${product.price}
           </div>
         </div>
-      </Link>
-      
-      <div className="px-4 pb-4 flex gap-2">
-        <button className="absolute top-2 right-2 p-2 bg-white rounded-full shadow-md hover:bg-gray-50 opacity-0 group-hover:opacity-100 transition-opacity z-10">
-          <Heart size={16} className="text-gray-600" />
-        </button>
-        <button
-          disabled={!product.inStock}
-          className={`flex-1 px-4 py-2 rounded-lg font-medium transition-colors ${
-            product.inStock
-              ? 'bg-blue-600 hover:bg-blue-700 text-white'
-              : 'bg-gray-200 text-gray-500 cursor-not-allowed'
-          }`}
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            console.log('Add to cart:', product.name);
-          }}
-        >
-          {product.inStock ? 'Add to Cart' : 'Out of Stock'}
-        </button>
       </div>
-    </div>
+    </Link>
   );
 }
 
